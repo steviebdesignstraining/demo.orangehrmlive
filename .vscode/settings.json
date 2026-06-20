@@ -1,0 +1,4 @@
+{
+  "playwright.configFile": "demo-orangehrmlive-tests/playwright.config.ts",
+  "debug.javascript.autoAttachFilter": "onlyWithFlag"
+}

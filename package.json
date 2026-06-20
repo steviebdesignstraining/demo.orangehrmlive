@@ -1,0 +1,44 @@
+{
+  "name": "demo.orangehrmlive",
+  "private": true,
+  "workspaces": [
+    "demo-orangehrmlive-tests"
+  ],
+  "scripts": {
+    "test": "dotenvx run -- playwright test --config demo-orangehrmlive-tests/playwright.config.ts",
+    "test:ui": "dotenvx run -- playwright test --config demo-orangehrmlive-tests/playwright.config.ts --ui",
+    "test:headed": "dotenvx run -- playwright test --config demo-orangehrmlive-tests/playwright.config.ts --headed",
+    "test:debug": "dotenvx run -- playwright test --config demo-orangehrmlive-tests/playwright.config.ts --debug",
+    "test:ordered": "dotenvx run -- playwright test --config demo-orangehrmlive-tests/playwright.config.ts --project=suite:admin-run",
+    "test:ui:ordered": "dotenvx run -- playwright test --config demo-orangehrmlive-tests/playwright.config.ts --ui --project=suite:admin-run",
+    "test:headed:ordered": "dotenvx run -- playwright test --config demo-orangehrmlive-tests/playwright.config.ts --headed --project=suite:admin-run",
+    "test:debug:ordered": "dotenvx run -- playwright test --config demo-orangehrmlive-tests/playwright.config.ts --debug --project=suite:admin-run",
+    "test:chromium": "dotenvx run -- playwright test --config demo-orangehrmlive-tests/playwright.config.ts --project=chromium",
+    "test:firefox": "dotenvx run -- playwright test --config demo-orangehrmlive-tests/playwright.config.ts --project=firefox",
+    "test:webkit": "dotenvx run -- playwright test --config demo-orangehrmlive-tests/playwright.config.ts --project=webkit",
+    "test:login:positive": "dotenvx run -- playwright test --config demo-orangehrmlive-tests/playwright.config.ts --project=suite:login-positive",
+    "test:login:negative": "dotenvx run -- playwright test --config demo-orangehrmlive-tests/playwright.config.ts --project=suite:login-negative",
+    "test:dashboard:positive": "dotenvx run -- playwright test --config demo-orangehrmlive-tests/playwright.config.ts --project=suite:dashboard-positive",
+    "test:dashboard:negative": "dotenvx run -- playwright test --config demo-orangehrmlive-tests/playwright.config.ts --project=suite:dashboard-negative",
+    "test:login:positive:happy-path": "dotenvx run -- playwright test --config demo-orangehrmlive-tests/playwright.config.ts --project=test:login-positive-happy-path",
+    "test:login:positive:session-persists": "dotenvx run -- playwright test --config demo-orangehrmlive-tests/playwright.config.ts --project=test:login-positive-session-persists",
+    "test:login:positive:logout": "dotenvx run -- playwright test --config demo-orangehrmlive-tests/playwright.config.ts --project=test:login-positive-logout",
+    "test:login:negative:invalid-credentials": "dotenvx run -- playwright test --config demo-orangehrmlive-tests/playwright.config.ts --project=test:login-negative-invalid-credentials",
+    "test:login:negative:wrong-password": "dotenvx run -- playwright test --config demo-orangehrmlive-tests/playwright.config.ts --project=test:login-negative-wrong-password",
+    "test:login:negative:empty-fields": "dotenvx run -- playwright test --config demo-orangehrmlive-tests/playwright.config.ts --project=test:login-negative-empty-fields",
+    "test:login:negative:empty-password": "dotenvx run -- playwright test --config demo-orangehrmlive-tests/playwright.config.ts --project=test:login-negative-empty-password",
+    "test:login:negative:empty-username": "dotenvx run -- playwright test --config demo-orangehrmlive-tests/playwright.config.ts --project=test:login-negative-empty-username",
+    "test:login:negative:unauthenticated-dashboard": "dotenvx run -- playwright test --config demo-orangehrmlive-tests/playwright.config.ts --project=test:login-negative-unauthenticated-dashboard",
+    "test:dashboard:positive:widgets": "dotenvx run -- playwright test --config demo-orangehrmlive-tests/playwright.config.ts --project=test:dashboard-positive-widgets",
+    "test:dashboard:positive:left-nav-menu": "dotenvx run -- playwright test --config demo-orangehrmlive-tests/playwright.config.ts --project=test:dashboard-positive-left-nav-menu",
+    "test:dashboard:positive:left-nav-toggle": "dotenvx run -- playwright test --config demo-orangehrmlive-tests/playwright.config.ts --project=test:dashboard-positive-left-nav-toggle",
+    "dotenvx:encrypt": "dotenvx encrypt",
+    "dotenvx:decrypt": "dotenvx decrypt",
+    "dotenvx:run": "dotenvx run --"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.60.0",
+    "@types/node": "^25.9.1",
+    "@dotenvx/dotenvx": "^1.72.0"
+  }
+}
