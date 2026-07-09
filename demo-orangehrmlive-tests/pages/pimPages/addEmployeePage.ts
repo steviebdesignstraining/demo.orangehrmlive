@@ -210,9 +210,83 @@ export class AddEmployeePage {
   }
 
   async clickSave(): Promise<void> {
+    // The Save button locator is scoped to a single form, but guard against any
+    // future ambiguity by asserting exactly one match before clicking.
+    await expect(this.saveButton).toHaveCount(1, { timeout: 10000 });
     await this.saveButton.click();
     // Wait for navigation to complete after save (navigates to personal details page)
     await this.page.waitForURL(/\/pim\/viewPersonalDetails|\/pim\/addEmployee/, { timeout: 30000 });
+  }
+
+  async verifySaveSuccess(): Promise<void> {
+    // OrangeHRM shows a green "Successfully Saved" toast after a successful save.
+    const toast = this.page.locator(PimSelectors.saveSuccessToast);
+    await expect(toast).toBeVisible({ timeout: 10000 });
+    await expect(toast).toContainText(PimSelectors.saveSuccessToastText);
+  }
+
+  async verifyPersonalDetailsElementsPresent(): Promise<void> {
+    // Personal Details form fields
+    await expect(this.personalDetailsTitle).toBeVisible();
+    await expect(this.otherIdInput).toBeVisible();
+    await expect(this.driversLicenseInput).toBeVisible();
+    await expect(this.licenseExpiryDateInput).toBeVisible();
+    await expect(this.nationalityDropdown).toBeVisible();
+    await expect(this.maritalStatusDropdown).toBeVisible();
+    await expect(this.dateOfBirthInput).toBeVisible();
+    await expect(this.genderMaleRadio).toBeVisible();
+    await expect(this.genderFemaleRadio).toBeVisible();
+
+    // Custom Fields form fields
+    await expect(this.customFieldsTitle).toBeVisible();
+    await expect(this.bloodTypeDropdown).toBeVisible();
+    await expect(this.testFieldInput).toBeVisible();
+
+    // The Save button must resolve to exactly ONE element (the Personal Details
+    // form). If it ever matches more than one, clickSave() would throw a
+    // strict-mode violation, so fail fast here with a clear signal.
+    await expect(this.saveButton).toHaveCount(1);
+  }
+
+  async verifyPersonalDetailsPopulated(data: {
+    otherId?: string;
+    driversLicense?: string;
+    licenseExpiryDate?: string;
+    nationality?: string;
+    maritalStatus?: string;
+    dateOfBirth?: string;
+    gender?: "male" | "female";
+    bloodType?: string;
+    testField?: string;
+  }): Promise<void> {
+    if (data.otherId) {
+      await expect(this.otherIdInput).toHaveValue(data.otherId);
+    }
+    if (data.driversLicense) {
+      await expect(this.driversLicenseInput).toHaveValue(data.driversLicense);
+    }
+    if (data.licenseExpiryDate) {
+      await expect(this.licenseExpiryDateInput).toHaveValue(data.licenseExpiryDate);
+    }
+    if (data.nationality) {
+      await expect(this.nationalityDropdown).toContainText(data.nationality);
+    }
+    if (data.maritalStatus) {
+      await expect(this.maritalStatusDropdown).toContainText(data.maritalStatus);
+    }
+    if (data.dateOfBirth) {
+      await expect(this.dateOfBirthInput).toHaveValue(data.dateOfBirth);
+    }
+    if (data.gender) {
+      const radio = data.gender === "male" ? this.genderMaleRadio : this.genderFemaleRadio;
+      await expect(radio).toBeChecked();
+    }
+    if (data.bloodType) {
+      await expect(this.bloodTypeDropdown).toContainText(data.bloodType);
+    }
+    if (data.testField) {
+      await expect(this.testFieldInput).toHaveValue(data.testField);
+    }
   }
 
   async clickCancel(): Promise<void> {
@@ -226,6 +300,13 @@ export class AddEmployeePage {
 
   async clickPersonalDetailsTab(): Promise<void> {
     await this.personalDetailsTab.click();
+    // The Personal Details form is populated asynchronously from the API.
+    // Wait for the form loader to disappear (and the network to settle) so that
+    // a late async response can't overwrite values we fill in right after.
+    await this.page
+      .waitForSelector('.oxd-form-loader', { state: 'hidden', timeout: 30000 })
+      .catch(() => {});
+    await this.page.waitForLoadState('networkidle').catch(() => {});
   }
 
   async clickContactDetailsTab(): Promise<void> {

@@ -154,8 +154,18 @@ export const PimSelectors = {
   confirmPasswordInput: 'input[type="password"]',
 
   // Form buttons
+  // NOTE: The Edit Employee > Personal Details page renders TWO "Save" buttons:
+  // one for the Personal Details form and one for the Custom Fields form.
+  // Scope the locator to the form that contains the "Employee Full Name" label
+  // (the Personal Details form on the edit page, and the Add Employee form on the
+  // add page). The Custom Fields form has no "Employee Full Name" label, so its
+  // Save button is excluded and the locator resolves to exactly ONE element.
   cancelButton: 'button:has-text("Cancel")',
-  saveButton: 'button:has-text("Save")',
+  saveButton: 'form:has(label:has-text("Employee Full Name")) button:has-text("Save")',
+
+  // Save success toast (OrangeHRM shows "Successfully Saved" after a successful save)
+  saveSuccessToast: '.oxd-toast--success',
+  saveSuccessToastText: 'Successfully Saved',
 
   // ========================================
   // EDIT EMPLOYEE FORM
